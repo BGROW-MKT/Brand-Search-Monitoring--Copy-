@@ -1,21 +1,20 @@
 FROM python:3.10-slim
 
-# 기본 패키지
+# Install dependencies
 RUN apt-get update && apt-get install -y \
     curl \
-    wget \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# 작업 디렉토리 설정
+# Set work directory
 WORKDIR /app
 
-# requirements.txt 복사 및 설치
-COPY requirements.txt .
+# Copy files
+COPY requirements.txt requirements.txt
+COPY worker.py worker.py
+COPY keywords.txt keywords.txt
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 스크립트 복사
-COPY worker.py .
-COPY keywords.txt .
-
-# 실행
 CMD ["python", "worker.py"]
